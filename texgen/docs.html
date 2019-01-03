@@ -1,0 +1,133 @@
+<pre class="docs"><span class="hl_cc">//Совместимость с новыми версиями GLSL</span>
+<span class="hl_kv">vec4</span> texture(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> texcoord)
+<span class="hl_kv">vec4</span> texture(<span class="hl_kv">samplerCube</span> s, <span class="hl_kv">vec3</span> texcoord)
+                
+<span class="hl_cc">//Совместимость с HLSL</span>
+<span class="hl_kv">float</span> saturate(<span class="hl_kv">float</span> x)
+<span class="hl_kv">vec2</span> saturate(<span class="hl_kv">vec2</span> x)
+<span class="hl_kv">vec3</span> saturate(<span class="hl_kv">vec3</span> x)
+<span class="hl_kv">vec4</span> saturate(<span class="hl_kv">vec4</span> x)
+<span class="hl_kv">float</span> frac(<span class="hl_kv">float</span> x)
+<span class="hl_kv">vec2</span> frac(<span class="hl_kv">vec2</span> x)
+<span class="hl_kv">vec3</span> frac(<span class="hl_kv">vec3</span> x)
+<span class="hl_kv">vec4</span> frac(<span class="hl_kv">vec4</span> x)
+                
+<span class="hl_cc">//Математика</span>
+<span class="hl_kv">const</span> <span class="hl_kv">float</span> PI
+<span class="hl_kv">vec4</span> taylorInvSqrt(<span class="hl_kv">vec4</span> r)
+<span class="hl_kv">mat3</span> RotationEulerMatrix(<span class="hl_kv">vec3</span> rotRads)
+<span class="hl_kv">float</span> ExpSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
+<span class="hl_kv">float</span> ExpSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
+<span class="hl_kv">float</span> SmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
+<span class="hl_kv">float</span> SmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
+<span class="hl_kv">float</span> PowerSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
+<span class="hl_kv">float</span> PowerSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
+<span class="hl_kv">genType</span> sqr(<span class="hl_kv">genType</span> x)
+<span class="hl_kv">genType</span> sinh(<span class="hl_kv">genType</span> x)
+<span class="hl_kv">genType</span> cosh(<span class="hl_kv">genType</span> x)
+<span class="hl_kv">genType</span> tanh(<span class="hl_kv">genType</span> x)
+<span class="hl_kv">genType</span> sigma(<span class="hl_kv">genType</span> x) <span class="hl_op">=</span> x <span class="hl_op">/</span> (<span class="hl_num">1.0</span> <span class="hl_op">+</span> abs(x))
+<span class="hl_kv">genType</span> sinc(genType x) <span class="hl_op">=</span> sin(x) <span class="hl_op">/</span> x
+                
+<span class="hl_cc">//SDF для 3D примитивов с центром в начале координат</span>
+<span class="hl_kv">float</span> SphereSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">float</span> radius)
+<span class="hl_kv">float</span> PlaneSignedDistance(<span class="hl_kv">vec3</span> point)
+<span class="hl_kv">float</span> BoxSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> extents)
+<span class="hl_kv">float</span> RoundBoxDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> extents, <span class="hl_kv">float</span> radius)
+<span class="hl_kv">float</span> TorusSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> magMinRadius)
+<span class="hl_kv">float</span> HexPrismSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
+<span class="hl_kv">float</span> CapsuleSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> a, <span class="hl_kv">vec3</span> b, <span class="hl_kv">float</span> radius)
+<span class="hl_kv">float</span> TriPrismSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
+<span class="hl_kv">float</span> CylinderSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
+<span class="hl_kv">float</span> ConeSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> c)
+                
+<span class="hl_cc">//Псевдослучайные числа, хеши</span>
+<span class="hl_kv">float</span> frand(<span class="hl_kv">vec2</span> seed)
+<span class="hl_kv">vec2</span> f2rand(<span class="hl_kv">vec2</span> seed)
+<span class="hl_kv">vec3</span> f3rand(<span class="hl_kv">vec2</span> seed)
+<span class="hl_kv">float</span> permute(<span class="hl_kv">float</span> x)
+<span class="hl_kv">vec3</span> permute(<span class="hl_kv">vec3</span> x)
+<span class="hl_kv">vec4</span> permute(<span class="hl_kv">vec4</span> x)
+<span class="hl_kv">vec2</span> fade(<span class="hl_kv">vec2</span> t)
+<span class="hl_kv">vec3</span> fade(<span class="hl_kv">vec3</span> t)
+                
+<span class="hl_cc">//Шум перлина</span>
+<span class="hl_kv">float</span> snoise(<span class="hl_kv">vecN</span> v)
+<span class="hl_kv">float</span> cnoise(<span class="hl_kv">vecN</span> v[, <span class="hl_kv">vecN</span> period<span class="hl_op">=</span><span class="hl_kv">vecN</span>(<span class="hl_num">289.0</span>)])
+<span class="hl_kv">vec2</span> cellular(<span class="hl_kv">vec2</span> P[, <span class="hl_kv">vec2</span> rep<span class="hl_op">=</span><span class="hl_kv">vec2</span>(<span class="hl_num">289.0</span>)])
+<span class="hl_kv">vec2</span> cellular(<span class="hl_kv">vec3</span> P[, <span class="hl_kv">vec3</span> rep<span class="hl_op">=</span><span class="hl_kv">vec3</span>(<span class="hl_num">289.0</span>)])
+<span class="hl_kv">vec2</span> grad2(<span class="hl_kv">vec2</span> p, <span class="hl_kv">float</span> rot)
+<span class="hl_kv">float</span> srdnoise(<span class="hl_kv">vec2</span> P, <span class="hl_kv">float</span> rot, <span class="hl_kv">out</span> <span class="hl_kv">vec2</span> grad)
+<span class="hl_kv">float</span> FloatHash(<span class="hl_kv">float</span> n)
+<span class="hl_kv">float</span> FloatHash(<span class="hl_kv">vec2</span> v)
+<span class="hl_kv">vec2</span> Vec2Hash(<span class="hl_kv">vec2</span> v)
+<span class="hl_kv">vec3</span> Vec3Hash(<span class="hl_kv">vec2</span> v)
+<span class="hl_kv">float</span> ValueNoise2D(<span class="hl_kv">vec2</span> v)
+<span class="hl_kv">float</span> ValueNoise3D(<span class="hl_kv">vec3</span> v)
+<span class="hl_kv">float</span> ValueNoise3D(<span class="hl_kv">vec3</span> v, <span class="hl_kv">sampler2D</span> noiseTex, <span class="hl_kv">vec2</span> noiseTex_PixelSize)
+<span class="hl_kv">float</span> GradientNoise(<span class="hl_kv">vec2</span> v)
+<span class="hl_kv">vec2</span> SmoothVoronoi(<span class="hl_kv">vec2</span> v, <span class="hl_kv">float</span> smoothness)
+<span class="hl_kv">float</span> Voronoise(<span class="hl_kv">vec2</span> x, <span class="hl_kv">float</span> gridControl, <span class="hl_kv">float</span> metricControl)
+                
+<span class="hl_cc">//Несколько октав шума Перлина</span>
+<span class="hl_kv">float</span> PerlinOctaves(<span class="hl_kv">vecN</span> coord, <span class="hl_kv">vecN</span> repeat, <span class="hl_kv">int</span> octaves[, <span class="hl_kv">float</span> gain<span class="hl_op">=</span><span class="hl_num">0.5</span>, <span class="hl_kv">float</span> lacunarity<span class="hl_op">=</span><span class="hl_num">2.0</span>, vecN offset<span class="hl_op">=</span>vecN(<span class="hl_num">0.0</span>)])
+                
+<span class="hl_cc">//Несколько октав шума Перлина с указанным уровнем низких (coeffLow) и высоких (gainHigh) частот.</span>
+<span class="hl_cc">//Соответствует PerlinOctaves при coeffLow = 1 и gainHigh = gain</span>
+<span class="hl_kv">float</span> PerlinOctavesSpectrum(<span class="hl_kv">vec2</span> coord, <span class="hl_kv">vec2</span> period, <span class="hl_kv">int</span> octaves, <span class="hl_kv">float</span> coeffLow, <span class="hl_kv">float</span> gainHigh[, <span class="hl_kv">float</span> lacunarity, <span class="hl_kv">vec2</span> offset])
+                
+<span class="hl_cc">//Цветовые пространства</span>
+<span class="hl_kv">vec3</span> RGB2HSV(<span class="hl_kv">vec3</span> c)
+<span class="hl_kv">vec3</span> HSV2RGB(<span class="hl_kv">vec3</span> c)
+<span class="hl_kv">vec3</span> RGB2YUV(<span class="hl_kv">vec3</span> rgb)
+<span class="hl_kv">vec3</span> YUV2RGB(<span class="hl_kv">vec3</span> yuv)
+<span class="hl_kv">vec4</span> RGB2RGBM(<span class="hl_kv">vec3</span> color)
+<span class="hl_kv">vec3</span> RGBM2RGB(<span class="hl_kv">vec4</span> rgbm)
+<span class="hl_kv">float</span> Linear2SRGB(<span class="hl_kv">float</span> x)
+<span class="hl_kv">vec2</span> Linear2SRGB(<span class="hl_kv">vec2</span> x)
+<span class="hl_kv">vec3</span> Linear2SRGB(<span class="hl_kv">vec3</span> x)
+<span class="hl_kv">vec4</span> Linear2SRGB(<span class="hl_kv">vec4</span> x)
+<span class="hl_kv">float</span> SRGB2Linear(<span class="hl_kv">float</span> x)
+<span class="hl_kv">vec2</span> SRGB2Linear(<span class="hl_kv">vec2</span> x)
+<span class="hl_kv">vec3</span> SRGB2Linear(<span class="hl_kv">vec3</span> x)
+<span class="hl_kv">vec4</span> SRGB2Linear(<span class="hl_kv">vec4</span> x)
+                
+<span class="hl_cc">//Нормали по высотам</span>
+<span class="hl_kv">vec3</span> NormalFromHeights(<span class="hl_kv">float</span> center, <span class="hl_kv">float</span> right, <span class="hl_kv">float</span> bottom, <span class="hl_kv">float</span> scale)
+<span class="hl_kv">vec3</span> NormalFromHeightMapR(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapG(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapB(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapA(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
+<span class="hl_kv">void</span> Gather8AdjacentTexelsR(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
+<span class="hl_kv">void</span> Gather8AdjacentTexelsG(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
+<span class="hl_kv">void</span> Gather8AdjacentTexelsB(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
+<span class="hl_kv">void</span> Gather8AdjacentTexelsA(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
+<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3R(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3G(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3B(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
+<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3A(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
+                
+<span class="hl_cc">//Свёртка, размытие, дифференцирование изображения</span>
+<span class="hl_kv">vec4</span> ConvolutionFilter3(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">9</span>])
+<span class="hl_kv">vec4</span> ConvolutionFilter5(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">25</span>])
+<span class="hl_kv">vec4</span> ConvolutionFilter7(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">49</span>])
+<span class="hl_kv">vec4</span> EdgeDetect(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize)
+<span class="hl_kv">vec4</span> GaussianBlur9(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">vec2</span> dir)
+<span class="hl_kv">vec4</span> GaussianBlur17(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">vec2</span> dir)
+<span class="hl_kv">vec4</span> NoiseBlur(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">float</span> blurAmount)
+<span class="hl_kv">vec4</span> DiffFree(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> pixSize)
+                
+<span class="hl_cc">//Фильтры выборки из текстуры</span>
+<span class="hl_kv">vec4</span> textureBicubic(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> texcoord, <span class="hl_kv">vec2</span> texelSize)
+<span class="hl_kv">vec4</span> textureSmooth(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> texcoord, <span class="hl_kv">vec2</span> texelSize)
+                
+<span class="hl_cc">//Генерация сетки</span>
+<span class="hl_kv">float</span> GenBricks(<span class="hl_kv">vec2</span> pos, <span class="hl_kv">ivec2</span> count, <span class="hl_kv">vec2</span> dist, <span class="hl_kv">float</span> scrollX)
+<span class="hl_kv">void</span> HexGrid(<span class="hl_kv">out</span> <span class="hl_kv">vec4</span> o, <span class="hl_kv">vec2</span> TexCoord)
+                
+<span class="hl_cc">//Запаковка float в текстуры с 8-битными каналами, актуально для старых мобильных устройств</span>
+<span class="hl_kv">vec4</span> EncodeFloatAsRGBA8(<span class="hl_kv">float</span> v)
+<span class="hl_kv">float</span> DecodeFloatFromRGBA8(<span class="hl_kv">vec4</span> rgba8)
+<span class="hl_kv">vec2</span> EncodeFloatAsRG8(<span class="hl_kv">float</span> v)
+<span class="hl_kv">float</span> DecodeFloatFromRG8(<span class="hl_kv">vec2</span> rg8)
+</pre>

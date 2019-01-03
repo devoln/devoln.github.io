@@ -1,4 +1,3 @@
-document.currentScript.code = `
 ///////////////////////////////////////
 // GLSL < 1.3 Compatibility Library //
 ///////////////////////////////////////
@@ -104,6 +103,19 @@ float sqr(float x) {return x*x;}
 vec2 sqr(vec2 x) {return x*x;}
 vec3 sqr(vec3 x) {return x*x;}
 vec4 sqr(vec4 x) {return x*x;}
+
+float invsqr(float x) {return 1.0 / (1.0 + x*x);}
+vec2 invsqr(vec2 x) {return 1.0 / (1.0 + x*x);}
+vec3 invsqr(vec3 x) {return 1.0 / (1.0 + x*x);}
+vec4 invsqr(vec4 x) {return 1.0 / (1.0 + x*x);}
+
+float invsqr(float x, float add) {return 1.0 / (add + x*x);}
+vec2 invsqr(vec2 x, float add) {return 1.0 / (add + x*x);}
+vec2 invsqr(vec2 x, vec2 add) {return 1.0 / (add + x*x);}
+vec3 invsqr(vec3 x, float add) {return 1.0 / (add + x*x);}
+vec3 invsqr(vec3 x, vec3 add) {return 1.0 / (add + x*x);}
+vec4 invsqr(vec4 x, float add) {return 1.0 / (add + x*x);}
+vec4 invsqr(vec4 x, vec4 add) {return 1.0 / (add + x*x);}
 
 float sinc(float x) {return x == 0.0? 1.0: sin(x) / x;}
 vec2 sinc(vec2 x) {return mix(sin(x) / x, vec2(1.0), vec2(equal(x, vec2(0.0))));}
@@ -893,6 +905,12 @@ float PerlinOctaves(vec2 coord, vec2 period, int octaves, float gain)
 float PerlinOctaves(vec2 coord, vec2 period, int octaves)
 {return PerlinOctaves(coord, period, octaves, 0.5);}
 
+float PerlinOctaves(vec2 coord, vec2 period, int octaves, float gain, vec2 offset)
+{return PerlinOctaves(coord, period, octaves, gain, 2.0, offset);}
+
+float PerlinOctaves(vec2 coord, vec2 period, int octaves, vec2 offset)
+{return PerlinOctaves(coord, period, octaves, 0.5, 2.0, offset);}
+
 float PerlinOctaves(vec3 coord, vec3 period, int octaves, float gain, float lacunarity, vec3 offset)
 {
 	float sum = 0.0, g = 1.0, l = 1.0, normalizer = 0.0;
@@ -1610,7 +1628,7 @@ float GenBricks(vec2 pos, ivec2 count, vec2 dist, float scrollX)
 	vec2 inBrick = step(dist*vec2(count), fract(newPos*vec2(count)));
 	return inBrick.x*inBrick.y*(1.0+frand(floor(newPos*vec2(count))));
 }
-	
+
 void HexGrid(out vec4 o, vec2 TexCoord)
 {
 	vec2 q = vec2(TexCoord.x*2.0*0.5773503, TexCoord.y + TexCoord.x*0.5773503);
@@ -1623,4 +1641,3 @@ void HexGrid(out vec4 o, vec2 TexCoord)
 	vec4 o1 = vec4(i+ca-cb*ma, 0.0, 0.0);
 	o = 0.5+0.5*sin(o1);
 }
-`;

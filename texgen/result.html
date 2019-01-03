@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>ProcedGen Textures</title>
+<title>SynthGen Result</title>
 
 <style>
 html,
@@ -53,11 +53,86 @@ body {
 *::-webkit-scrollbar-corner {
     background: transparent;
 }
+
+.canvas-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	overflow-wrap: break-word;
+	background: rgba(0, 0, 0, 0.5)
+}
+
+
+
+.menu-bar {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu-bar a {
+  float: left;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  padding: 4px 8px;
+  text-decoration: none;
+  background-color: rgba(32, 32, 32, 0.6);
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 12px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 4px 8px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.menu-bar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: #25a;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(32, 32, 32, 0.6);
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 503;
+}
+
+.dropdown-content a {
+  float: none;
+  color: white;
+  padding: 4px 8px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #25a;
+}
+
+.dropdown-show {
+  display: block;
+  z-index: 500;
+}
+
 </style>
 
 </head>
 
-
+<body>
 <script id="VertexShaderCode" type="x-shader/x-vertex">
 #version 100
 attribute vec2 aTexCoord;
@@ -65,7 +140,7 @@ varying vec2 TexCoord;
 void main()
 {
 	TexCoord = aTexCoord;
-	gl_Position = vec4(TexCoord*2.0 - vec2(1.0), 0.0, 1.0);
+	gl_Position = vec4(TexCoord*2.0 - 1.0, 0.0, 1.0);
 }
 </script>
 
@@ -104,37 +179,52 @@ uniform vec2 TextureSize;
 uniform sampler2D TexA, TexB, TexC, TexD, TexE, TexF, TexG, TexH;
 uniform vec2 TexASize, TexBSize, TexCSize, TexDSize, TexESize, TexFSize, TexHSize;
 
-vec4 procedgen_internal_rgba(float x) {return vec4(x, x, x, 1.0);}
-vec4 procedgen_internal_rgba(vec3 x) {return vec4(x, 1.0);}
-vec4 procedgen_internal_rgba(vec4 x) {return x;}
-
-vec3 procedgen_internal_rgb(float x) {return vec3(x);}
-vec3 procedgen_internal_rgb(vec3 x) {return x;}
-vec3 procedgen_internal_rgb(vec4 x) {return x.rgb;}
-
-vec2 procedgen_internal_rg(float x) {return vec2(x);}
-vec2 procedgen_internal_rg(vec2 x) {return x;}
-
-float procedgen_internal_r(float x) {return x;}
-float procedgen_internal_r(vec3 x) {return x.r;}
-float procedgen_internal_r(vec4 x) {return x.r;}
+vec4 synthgen_internal_rgba(float x) {return vec4(x, x, x, 1.0);}
+vec4 synthgen_internal_rgba(vec2 x) {return vec4(x.xy, 0.0, 1.0);}
+vec4 synthgen_internal_rgba(vec3 x) {return vec4(x, 1.0);}
+vec4 synthgen_internal_rgba(vec4 x) {return x;}
 </script>
 
-<script id="DefaultFragmentShaderCode" type="x-shader/x-fragment">
-void main()
-{
-	vec2 coord = TexCoord*2.0 - 1.0;
-	float factor = max(0.0, 1.0 - dot(coord, coord));
-	gl_FragColor = vec4(mix(vec3(1.0, 0.5, 1.0), vec3(1.0, 1.0, 0.3), factor)*factor, 1.0);
+<script>
+window.onclick = function(e) {
+	if(e.target.matches('.dropbtn')) return;
+	var elements = document.getElementsByClassName('dropdown-show');
+	for(var i = 0; i < elements.length; i++)
+		elements[i].classList.remove('dropdown-show');
 }
 </script>
 
-<body>
-	<span id="eWebGLSupportMsg"></span>
-	<span id="eResults"></span>
+	<div style="display:none">
+		<div id="eSmallCanvasTemplate" style="position: relative; display: inline-block">
+			<canvas></canvas>
+			<div class="canvas-content">
+				<div class="menu-bar">
+					<div class="dropdown">
+						<button class="dropbtn" onclick="this.nextElementSibling.classList.toggle('dropdown-show')">Сохранить</button>
+						<div class="dropdown-content">
+							<a href="#" onclick="OnSaveImageButton(this, 'png')">PNG</a>
+							<a href="#" onclick="OnSaveImageButton(this, 'jpg')">JPEG</a>
+							<a href="#" onclick="OnSaveImageButton(this, 'webp')">WEBP</a>
+							<a href="#" onclick="OnSaveImageButton(this, 'bmp')">BMP</a>
+						</div>
+					</div>
+				</div>
+				<span name="name"></span>
+			</div>
+		</div>
+	</div>
+
+	<span id="eLogOutput"></span>
+	<span id="eResults">
+		<div id="eMainCanvasContainer" style="position: relative">
+			<canvas id="eMainCanvas"></canvas>
+			<div class="canvas-content"></div>
+		</div>
+		<div id="eSmallCanvases"></div>
+	</span>
 </body>
 
-<script src="Utils.js"></script>
+<script src="utils.js"></script>
 
 <script>
 var gResults = eResults;
@@ -153,12 +243,14 @@ function Log(str)
 
 function LogError(str)
 {
-	gLog += "<span class='error'>" + str + "</span>";
+	gLog += "<span class='error'>" + str + "</span><br/>";
+	console.log(str);
 }
 
 function LogWarning(str)
 {
 	gLog += "<span class='warning'>" + str + "</span>";
+	console.log(str);
 }
 
 function GetLog()
@@ -166,10 +258,11 @@ function GetLog()
 	return gLog;
 }
 
-var gShaderLibraryLoader = LoadShaderAsync("ShaderLib.glsl.js");
+var gShaderLibraryLoader = LoadShaderAsync("ShaderLib.glsl");
 var gShaderInputCode = null;
 
 var gOffScreenCanvas = document.createElement("canvas");
+var gFBO = null;
 
 function InitGL(canvas)
 {
@@ -194,9 +287,48 @@ function InitGL(canvas)
 	var halfFloatTextureRenderSupported = gl.version >= 20 || gl.extTextureHalfFloat && gl.extTextureHalfFloatLinear;
 	if(gl.version < 20 && halfFloatTextureRenderSupported) gl.HALF_FLOAT = gl.extTextureHalfFloat.HALF_FLOAT_OES;
 
+	gl.state = {
+		currentFBO: null,
+		activeTextures: [null, null, null, null, null, null, null, null],
+		activeTextureSlot: 0,
+		currentProgram: null,
+		numTexturesCreated: 0,
+		numTexturesDeleted: 0
+	}
+
 	return gl;
 }
 var gl = InitGL(gOffScreenCanvas);
+
+function BindTextures(textures, samplerLocs)
+{
+	var count = Math.min(gl.state.activeTextures.length, Math.max(textures.length, samplerLocs? samplerLocs.length: 0));
+	for(var i = 0; i < count; i++)
+	{
+		if(gl.state.activeTextureSlot !== i)
+		{
+			gl.activeTexture(gl.TEXTURE0 + i);
+			gl.state.activeTextureSlot = i;
+		}
+		var tex = textures[i];
+		if(tex === undefined && samplerLocs)
+		{
+			if(samplerLocs[i] !== null)
+			{
+				gl.bindTexture(gl.TEXTURE_2D, null);
+				LogError("BindTextures: null texture! samplerLocs[" + i + " / " + samplerLocs.length + "] = " + samplerLocs[i]);
+			}
+			continue;
+		}
+		gl.bindTexture(gl.TEXTURE_2D, gl.state.activeTextures[i] = tex.id);
+	}
+}
+
+function BindFramebuffer(fbo)
+{
+	if(gl.state.currentFBO !== fbo)
+		gl.bindFramebuffer(gl.FRAMEBUFFER, gl.state.currentFBO = fbo);
+}
 
 function Shader(code, type)
 {
@@ -220,7 +352,7 @@ function Shader(code, type)
 
 Shader.prototype.Free = function()
 {
-	if(!this.id) return;
+	if(this.id === null) return;
 	gl.deleteShader(this.id);
 	this.id = null;
 }
@@ -240,7 +372,6 @@ function ShaderProgram(vertexShader, fragmentShader)
 	gl.detachShader(this.id, this.vertex.id);
 	gl.detachShader(this.id, this.fragment.id);
 	var success = gl.getProgramParameter(this.id, gl.LINK_STATUS);
-	gl.useProgram(this.id);
 	var log = gl.getProgramInfoLog(this.id);
 	if(!success || log.toLowerCase().indexOf("warn") !== -1)
 	{
@@ -248,20 +379,28 @@ function ShaderProgram(vertexShader, fragmentShader)
 		(success? LogWarning: LogError)(EscapeHTML(log));
 		console.log(log);
 	}
-
+	
 	if(!(vertexShader instanceof Shader)) this.vertex.Free();
 	if(!(fragmentShader instanceof Shader)) this.fragment.Free();
-
-	if(success) return;
-	gl.deleteProgram(this.id);
-	this.id = null;
+	
+	if(!success)
+	{
+		gl.deleteProgram(this.id);
+		this.id = null;
+	}
 }
 
 ShaderProgram.prototype.Free = function()
 {
-	if(!this.id) return;
+	if(this.id === null) return;
 	gl.deleteProgram(this.id);
 	this.id = null;
+}
+
+ShaderProgram.prototype.Bind = function()
+{
+	if(gl.state.currentProgram === this.id) return;
+	gl.useProgram(gl.state.currentProgram = this.id);
 }
 
 function GetShaderCode(id)
@@ -282,10 +421,9 @@ function GetShaderCode(id)
 if(gl)
 {
 	gCommonVertexShader = new Shader(GetShaderCode("VertexShaderCode"), gl.VERTEX_SHADER);
-	gExportFragmentShader = {
-		id: new Shader(GetShaderCode("FragmentExportShaderCode"), gl.FRAGMENT_SHADER),
-		samplerLocs: [0]
-	};
+	gExportFragmentShader = new Shader(GetShaderCode("FragmentExportShaderCode"), gl.FRAGMENT_SHADER);
+	gExportShaderProgram = new ShaderProgram(gCommonVertexShader, gExportFragmentShader);
+	gExportShaderProgram.samplerLocs = [0];
 
 	var gQuadBufferId = function()
 	{
@@ -297,13 +435,11 @@ if(gl)
 		return bufId;
 	}();
 
-
-	var gFBO = gl.createFramebuffer();
-	gl.bindFramebuffer(gl.FRAMEBUFFER, gFBO);
+	gFBO = gl.createFramebuffer();
 }
 else
 {
-	eWebGLSupportMsg.innerHtml = "<span class='error'>WebGL is not supported!</span>";
+	LogError("WebGL is not supported!");
 }
 
 function ParseGLType(str)
@@ -350,7 +486,7 @@ function ParseTextureFormat(str)
 	var numComponents = str.charCodeAt(str.length - 1) - 48;
 	if(numComponents < 1 || numComponents > 4)
 	{
-		LogError("Invalid texture format " + EscapeHTML(str) + "!</br>");
+		LogError("Invalid texture format " + EscapeHTML(str) + "!");
 		return null;
 	}
 	var typeStr = str.slice(0, -1);
@@ -362,7 +498,7 @@ function ParseTextureFormat(str)
 		internalFormat = ParseWebGL2InternalFormat(str);
 		if(!internalFormat)
 		{
-			LogError("Invalid texture format " + EscapeHTML(str) + "!<br/>");
+			LogError("Invalid texture format " + EscapeHTML(str) + "!");
 			return null;
 		}
 	}
@@ -380,7 +516,7 @@ function Texture(width, height, format, mipmapped)
 	var glfmt = ParseTextureFormat(format);
 	if(!glfmt)
 	{
-		LogError("Invalid texture format " + EscapeHTML(format) + "!<br/>");
+		LogError("Invalid texture format " + EscapeHTML(format) + "!");
 		return;
 	}
 	this.numComponents = glfmt.numComponents;
@@ -391,7 +527,10 @@ function Texture(width, height, format, mipmapped)
 	this.width = width;
 	this.height = height;
 	this.id = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, this.id);
+	this.id.index = this.index = gl.state.numTexturesCreated++;
+
+	gl.bindTexture(gl.TEXTURE_2D, gl.state.activeTextures[gl.state.activeTextureSlot] = this.id);
+
 	gl.texImage2D(gl.TEXTURE_2D, 0, this.internalFormat, this.width, this.height, 0, this.format, this.type, null);
 	var isLinearFilteringUnsupported = gl.version < 20 && (
 		format.startsWith("half") && !gl.extTextureHalfFloatLinear ||
@@ -407,45 +546,42 @@ function Texture(width, height, format, mipmapped)
 	gResults.textures.push(this);
 }
 
-function ShaderExpression(expr, numComponents)
+ShaderProgram.FromExpression = function(expr)
 {
-	var swizzle = "rgba".substr(0, numComponents);
-	var shaderKey = swizzle + " = procedgen_internal_" + swizzle + "(" + expr + ")";
-	if(shaderKey in gResults.shaders && gResults.shaders[shaderKey])
-		return gResults.shaders[shaderKey];
-	
-	this.expr = expr;
-	this.key = shaderKey;
-	this.numComponents = numComponents;
+	if(gResults.shaders[expr] && gResults.shaders[expr].id)
+		return gResults.shaders[expr];
 	
 	var code = GetShaderCode("FragmentShaderCodeStart");
 	if(gShaderLibraryLoader.code) code += "#line 1 0\n" + gShaderLibraryLoader.code;
 	code += "\n#line 1 1\n";
 	code += gShaderInputCode;
-	code += "\n#line 1 2\n";
-	code += "void main() {gl_FragColor." + shaderKey + ";}";
-	this.program = new ShaderProgram(gCommonVertexShader, code);
-	this.textureSizeLoc = gl.getUniformLocation(this.program.id, "TextureSize");
-	this.samplerLocs = [];
-	this.textureSizeLocs = [];
-	if(!this.program.id)
+	code += "\n#line 1 2\nvoid main() {gl_FragColor = synthgen_internal_rgba(" + expr + ");}";
+
+	var result = new ShaderProgram(gCommonVertexShader, code);
+	if(result.id === null)
 	{
-		LogError("Couldn't compile expression \"" + EscapeHTML(expr) + "\"!<br/>");
-		return;
+		LogError("Couldn't compile expression \"" + EscapeHTML(expr) + "\"!");
+		return null;
 	}
+	result.expr = expr;
+	result.textureSizeLoc = gl.getUniformLocation(result.id, "TextureSize");
+	result.samplerLocs = [];
+	result.textureSizeLocs = [];
 	
+	result.Bind();
 	for(var i=0; i<8; i++)
 	{
 		var uniformName = "Tex" + String.fromCharCode(65 + i);
-		var loc = gl.getUniformLocation(this.program.id, uniformName);
-		this.samplerLocs.push(loc);
-		var sizeLoc = gl.getUniformLocation(this.program.id, uniformName + "Size");
-		this.textureSizeLocs.push(sizeLoc);
+		var loc = gl.getUniformLocation(result.id, uniformName);
+		result.samplerLocs.push(loc);
+		var sizeLoc = gl.getUniformLocation(result.id, uniformName + "Size");
+		result.textureSizeLocs.push(sizeLoc);
 		if(loc == -1) continue;
 		gl.uniform1i(loc, i);
 	}
 	
-	gResults.shaders[shaderKey] = this;
+	gResults.shaders[expr] = result;
+	return result;
 }
 
 function DrawFullScreenQuad()
@@ -457,60 +593,78 @@ function DrawFullScreenQuad()
 	gl.disableVertexAttribArray(0);
 }
 
-Texture.FromShader = function(/*exprOrShader, [[width=CanvasSize.x, height=CanvasSize.y], format="byte4"], [inputTextures = [][, params = {}]*/)
+function FillViewportWithShader(exprOrShader, width, height, inputTextures)
+{
+	var shader;
+	if(exprOrShader instanceof ShaderProgram) shader = exprOrShader;
+	else if(typeof exprOrShader == 'string' || exprOrShader instanceof String)
+		shader = ShaderProgram.FromExpression(exprOrShader);
+	else
+	{
+		LogError("FillViewportWithShader: invalid type of first argument! Expected ShaderProgram or string, got: " + JSON.stringify(exprOrShader));
+		return false;
+	}
+	if(shader.id === null)
+	{
+		LogError("FillViewportWithShader: null shader!");
+		return false;
+	}
+
+	shader.Bind();
+	
+	if(shader.textureSizeLoc !== undefined && shader.textureSizeLoc != -1)
+		gl.uniform2f(shader.textureSizeLoc, width, height);
+
+	var numTex = Math.min(inputTextures.length, shader.samplerLocs.length);
+
+	BindTextures(inputTextures, shader.samplerLocs);
+	
+	for(var i=0; i<numTex; i++)
+	{
+		if(shader.textureSizeLocs)
+		{
+			var tsloc = shader.textureSizeLocs[i];
+			if(tsloc !== undefined && tsloc !== null)
+				gl.uniform2f(tsloc, inputTextures[i].width, inputTextures[i].height);
+		}
+	}
+	
+	gl.viewport(0, 0, width, height);
+	DrawFullScreenQuad();
+	
+	if(shader !== exprOrShader)
+	{
+		gl.deleteProgram(shader.id);
+		gResults.shaders[shader.expr] = undefined;
+	}
+
+	return true;
+}
+
+Texture.FromShader = function(/*exprOrShader, [width=CanvasSize.x, height=CanvasSize.y], [format="byte4"], [inputTextures = []], [params = {}]*/)
 {
 	function impl(exprOrShader, width, height, format, inputTextures, params)
 	{
 		if(inputTextures === undefined) inputTextures = [];
 		if(params === undefined) params = {};
 		var result = new Texture(width, height, format, params.mipmapped);
-		if(!result.id) return result;
+		if(result.id == null) return result;
 		
+		BindFramebuffer(gFBO);
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, result.id, 0);
-		var fbStatus = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-		if(fbStatus !== gl.FRAMEBUFFER_COMPLETE)
+		var success = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+		if(!success)
 		{
 			LogError("Error: framebuffer incomplete status 0x" + fbStatus.toString(16));
 			result.Free();
 			return result;
 		}
-		
-		var shExpr = exprOrShader;
-		if(typeof exprOrShader == 'string' || exprOrShader instanceof String)
-			shExpr = new ShaderExpression(exprOrShader, result.numComponents);
-		if(!shExpr.program.id)
+		else
 		{
-			result.Free();
-			return result;
+			success = FillViewportWithShader(exprOrShader, width, height, inputTextures);
+			if(!success) result.Free();
+			else if(result.mipmapped) gl.generateMipmap(gl.TEXTURE_2D);
 		}
-		
-		if(shExpr.textureSizeLoc && shExpr.textureSizeLoc != -1)
-			gl.uniform2f(shExpr.textureSizeLoc, width, height);
-		
-		
-		for(var i=0; i<shExpr.samplerLocs.length && i<inputTextures.length; i++)
-		{
-			gl.activeTexture(gl.TEXTURE0 + i);
-			if(shExpr.samplerLocs[i] == -1 || !inputTextures[i])
-			{
-				gl.bindTexture(gl.TEXTURE_2D, null);
-				continue;
-			}
-			if(shExpr.textureSizeLocs && shExpr.textureSizeLocs[i] != -1)
-				gl.uniform2f(shExpr.textureSizeLocs[i], inputTextures[i].width, inputTextures[i].height);
-			gl.bindTexture(gl.TEXTURE_2D, inputTextures[i].id);
-		}
-		
-		gl.viewport(0, 0, width, height);
-		DrawFullScreenQuad();
-		
-		if(shExpr !== exprOrShader)
-		{
-			gl.deleteProgram(shExpr.id);
-			gResults.shaders[shExpr.key] = undefined;
-		}
-		
-		if(result.mipmapped) gl.generateMipmap(gl.TEXTURE_2D);
 		return result;
 	}
 	if(!isNaN(arguments[1]))
@@ -526,9 +680,10 @@ var TextureFromShader = Texture.FromShader;
 Texture.prototype.Free = function()
 {
 	gResults[this.name] = undefined;
-	if(!this.id) return;
+	if(this.id === null) return;
 	gl.deleteTexture(this.id);
 	this.id = null;
+	gl.state.numTexturesDeleted++;
 }
 function DeleteTexture(tex) {tex.Free();}
 
@@ -536,7 +691,7 @@ function CreateImageFromTexture(tex, name)
 {
 	if(tex.formatStr != "byte4")
 	{
-		var tex2 = Texture.FromShader(gExportFragmentShader, tex.width, tex.height, "byte4", [tex], {mipmapped: false});
+		var tex2 = Texture.FromShader(gExportShaderProgram, tex.width, tex.height, "byte4", [tex], {mipmapped: false});
 		var result = CreateImageFromTexture(tex2, name + "->byte4");
 		tex2.Free();
 		return result;
@@ -547,21 +702,54 @@ function CreateImageFromTexture(tex, name)
 	return CreateImageFromPixels(pixels, tex.width, tex.height);
 }
 
+Texture.prototype.ToCanvas = function(dstCanvas)
+{
+	if(!dstCanvas) dstCanvas = gOffScreenCanvas;
+	if(dstCanvas !== gOffScreenCanvas &&
+		(gOffScreenCanvas.width !== dstCanvas.width ||
+		gOffScreenCanvas.height !== dstCanvas.height))
+	{
+		gOffScreenCanvas.width = dstCanvas.width;
+		gOffScreenCanvas.height = dstCanvas.height;
+	}
+	BindFramebuffer(null);
+	FillViewportWithShader(gExportShaderProgram, gOffScreenCanvas.width, gOffScreenCanvas.height, [this]);
+	if(dstCanvas !== gOffScreenCanvas)
+	{
+		if(!dstCanvas.context) dstCanvas.context = dstCanvas.getContext("2d");
+		dstCanvas.context.drawImage(gOffScreenCanvas, 0, 0);
+	}
+}
+
+Texture.prototype.ToTempCanvas = function()
+{
+	if(gOffScreenCanvas.width != this.width ||
+		gOffScreenCanvas.height != this.height)
+	{
+		gOffScreenCanvas.width = this.width;
+		gOffScreenCanvas.height = this.height;
+	}
+	BindFramebuffer(null);
+	FillViewportWithShader(gExportShaderProgram, gOffScreenCanvas.width, gOffScreenCanvas.height, [this]);
+	return gOffScreenCanvas;
+}
+
 Texture.prototype.Export = function(name)
 {
-	gResults.images[name] = CreateImageFromTexture(this, name);
+	gResults.exportedTextures[name] = this;
+	return this;
 }
 function ExportTexture(tex, name) {tex.Export(name);}
 
 function CleanUpResults()
 {
 	ClearLog();
-	gl.useProgram(null);
+	gl.useProgram(gl.state.currentProgram = null);
 	if(gResults.shaders)
 	for(var shaderKey in gResults.shaders)
 	{
 		var shader = gResults.shaders[shaderKey];
-		if(shader) gl.deleteProgram(shader.program.id);
+		if(shader) shader.Free();
 	}
 	gResults.shaders = {};
 	
@@ -571,16 +759,7 @@ function CleanUpResults()
 	});
 	gResults.textures = [];
 	
-	if(gResults.images)
-	for(var name in gResults.images)
-	{
-		var img = gResults.images[name];
-		if(!img) return;
-		if(img.onunload) img.onunload();
-	}
-	gResults.images = {};
-	
-	while(gResults.hasChildNodes()) gResults.removeChild(gResults.firstChild);
+	gResults.exportedTextures = {};
 }
 window.onunload = function(event) {
 	CleanUpResults();
@@ -588,6 +767,29 @@ window.onunload = function(event) {
 };
 
 var CanvasSize = [512, 512];
+var gCanvases = [];
+
+function OnSaveImageButton(node, ext) {
+	var canvas = node.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
+	var name = canvas.textureName;
+	var filename = name.replace(/[\W_]+/g, "_") + "." + ext;
+	switch(ext) {
+		case "png": SaveCanvasPNG(gResults.exportedTextures[name].ToTempCanvas(), filename); break;
+		case "jpg": SaveCanvasJPEG(gResults.exportedTextures[name].ToTempCanvas(), filename); break;
+		case "webp": if(ChromeVersion) SaveCanvasWEBP(gResults.exportedTextures[name].ToTempCanvas(), filename); break;
+		case "bmp": SaveCanvasBMP(gResults.exportedTextures[name].ToTempCanvas(), filename); break;
+	}
+}
+
+//if(!ChromeVersion) eSaveWEBP.style.display = "none";
+
+function SelectTextureToShow(name)
+{
+	gSelectedTextureName = name;
+	if(!name) return;
+	gResults.exportedTextures[name].ToCanvas(eMainCanvas);
+	eMainCanvas.textureName = name;
+}
 
 function Generate(controlCode, shaderCode)
 {
@@ -601,56 +803,41 @@ function Generate(controlCode, shaderCode)
 			if(err.stack) LogError(EscapeHTML(err.stack));
 			else LogError(EscapeHTML(err.toString()));
 		}
-		if(GetLog()) gResults.innerHTML += "<p>" + GetLog() + "</p>";
-		for(var name in gResults.images)
+		if(GetLog()) eLogOutput.innerHTML = "<p>" + GetLog() + "</p>";
+		var i = 0;
+		for(var name in gResults.exportedTextures)
 		{
-			var imageElements = document.createElement("p");
-			
-			var header = document.createElement("h2");
-			header.innerHTML = "<b>" + name + "</b>";
-			imageElements.appendChild(header);
-			
-			var filename = name.replace(/[\W_]+/g, "_");
-			var image = gResults.images[name];
-			
-			var savePng = document.createElement("input");
-			savePng.type = "button";
-			savePng.value = "Сохранить PNG";
-			savePng.onclick = function(image, filename) {return function() {
-				SaveImagePNG(image, filename + ".png");
-			}}(image, filename);
-			imageElements.appendChild(savePng);
-			
-			var saveJpeg = document.createElement("input");
-			saveJpeg.type = "button";
-			saveJpeg.value = "Сохранить JPEG";
-			saveJpeg.onclick = function(image, filename) {return function() {
-				SaveImageJPEG(image, filename + ".jpg");
-			}}(image, filename);
-			imageElements.appendChild(saveJpeg);
-			
-			var saveBmp = document.createElement("input");
-			saveBmp.type = "button";
-			saveBmp.value = "Сохранить BMP";
-			saveBmp.onclick = function(image, filename) {return function() {
-				SaveImageBMP(image, filename + ".bmp");
-			}}(image, filename);
-			imageElements.appendChild(saveBmp);
-			
-			if(ChromeVersion)
+			var tex = gResults.exportedTextures[name];
+			var canvas;
+			if(i >= gCanvases.length)
 			{
-				var saveWebp = document.createElement("input");
-				saveWebp.type = "button";
-				saveWebp.value = "Сохранить WEBP";
-				saveWebp.onclick = function(image, filename) {return function() {
-					SaveImageWEBP(image, filename + ".webp");
-				}}(image, filename);
-				imageElements.appendChild(saveWebp);
+				var canvasContainer = eSmallCanvasTemplate.cloneNode(true);
+				canvasContainer.id = "" + i;
+				canvas = canvasContainer.firstElementChild;
+				canvas.width = canvas.height = 128;
+				canvasContainer.style.width = canvasContainer.style.height = "128px";
+				eSmallCanvases.appendChild(canvasContainer);
+				gCanvases.push(canvasContainer);
 			}
-			
-			gResults.appendChild(imageElements);
-			gResults.appendChild(gResults.images[name]);
+			else canvas = gCanvases[i].firstElementChild;
+			gCanvases[i].querySelector('span[name="name"]').innerText = name;
+			tex.ToCanvas(canvas);
+			canvas.textureName = name;
+			i++;
 		}
+		while(i < gCanvases.length)
+		{
+			var canvasContainer = gCanvases.pop();
+			eSmallCanvases.removeChild(canvasContainer);
+			var canvas = canvasContainer.firstElementChild;
+			canvas.width = 0;
+			canvas.height = 0;
+		}
+		eMainCanvasContainer.style.width = CanvasSize[0] + "px";
+		eMainCanvasContainer.style.height = CanvasSize[1] + "px";
+		if(eMainCanvas.width != CanvasSize[0]) eMainCanvas.width = CanvasSize[0];
+		if(eMainCanvas.height != CanvasSize[1]) eMainCanvas.height = CanvasSize[1];
+		SelectTextureToShow(gCanvases[0].firstElementChild.textureName);
 	}
 	if(gShaderLibraryLoader.code !== undefined) genfunc();
 	else gShaderLibraryLoader.onload = genfunc;
@@ -658,6 +845,7 @@ function Generate(controlCode, shaderCode)
     
 function receiveMessage(event)
 {
+	if(!event.origin.startsWith(location.origin)) return;
     Generate(event.data.controlCode, event.data.glsl);
 }
 window.addEventListener("message", receiveMessage, false);

@@ -2,436 +2,50 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>ProcedGen Textures</title>
-<style>
-html,
-body {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    margin: 0;
-}
-
-body {
-    font-family: "Candara", sans-serif;
-    color: white;
-    background-color: #222;
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    box-orient: vertical;
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    box-direction: normal;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-direction: column;
-}
-
-.hidden {
-    display: none;
-}
-
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-header.main {
-    -webkit-box-flex: 0;
-    -moz-box-flex: 0;
-    box-flex: 0;
-    -webkit-flex: 0 0 70px;
-    -moz-flex: 0 0 70px;
-    -ms-flex: 0 0 70px;
-    flex: 0 0 70px;
-    height: 70px;
-    border-bottom: 4px solid #444;
-    background-color: black;
-}
-
-header.main::after {
-    clear: both;
-    content: "";
-    display: table;
-}
-
-header.main .info,
-header.main .toolbar {
-    height: 100%;
-}
-
-header.main .info {
-    float: left;
-    padding: 8px;
-    padding-left: 12px;
-}
-
-header.main .info .title {
-    font-size: 22px;
-}
-
-header.main .info .last-update {
-    margin-top: 4px;
-    font-size: 13px;
-    color: #888;
-    text-transform: uppercase;
-}
-
-header.main .info .last-update .value {
-    margin-left: 2px;
-    font-size: 14px;
-    color: #ccc;
-    text-transform: none;
-    margin-right: 10px;    
-}
-
-header.main .toolbar {
-    float: right;
-    padding: 10px;
-}
-
-header.main .toolbar::after {
-    clear: both;
-    content: "";
-    display: table;
-}
-
-header.main .toolbar .action {
-    float: left;
-    cursor: pointer;
-    border: 3px solid #333;
-    border-radius: 3px;
-    padding: 10px 12px;
-    background-color: black;
-    font-family: "Candara", sans-serif;
-    font-size: 18px;
-    color: white;
-}
-
-header.main .toolbar .action:not(:last-child) {
-    margin-right: 12px;
-}
-
-header.main .toolbar .action:hover {
-    background-color: #1f1f1f;
-}
-
-header.main .toolbar .action.highlight {
-    border-top-color: rgba(255, 255, 0, 0.7);
-}
-
-footer.status {
-    -webkit-box-flex: 0;
-    -moz-box-flex: 0;
-    box-flex: 0;
-    -webkit-flex: 0 0 34px;
-    -moz-flex: 0 0 34px;
-    -ms-flex: 0 0 34px;
-    flex: 0 0 34px;
-    height: 34px;
-    background-color: #333;
-    border-top: 1px solid #444;
-}
-
-.main-layout {
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    box-flex: 1;
-    -webkit-flex: 1;
-    -moz-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-
-.main-layout .splitter {
-    -webkit-box-flex: 0;
-    -moz-box-flex: 0;
-    box-flex: 0;
-    -webkit-flex: 0 0 8px;
-    -moz-flex: 0 0 8px;
-    -ms-flex: 0 0 8px;
-    flex: 0 0 8px;
-    width: 8px;
-    background-color: #444;
-    cursor: e-resize;
-}
-
-.main-layout .editors,
-.main-layout .result {
-    width: 50%;
-}
-
-.main-layout .result iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-.main-layout .area {
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    box-orient: vertical;
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    box-direction: normal;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-direction: column;
-    overflow: hidden;
-}
-
-.main-layout .area .tabs {
-  background-color: #111;
-  border-bottom: 4px solid #333;
-  box-shadow: 0 1px 14px 2px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-}
-
-.main-layout .editors .tabs {
-    position: relative;
-    z-index: 2;
-    -webkit-box-flex: 0;
-    -moz-box-flex: 0;
-    box-flex: 0;
-    -webkit-flex: 0 0 44px;
-    -moz-flex: 0 0 44px;
-    -ms-flex: 0 0 44px;
-    flex: 0 0 44px;
-}
-
-#eRightTabs {
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  height: 44px;
-  width: 100%;
-}
-
-#eRightPages {
-  margin-top: 44px;
-}
-
-#eRightArea {
-  position: relative;
-  height: 100%;
-}
-
-.main-layout .area .tabs::after {
-    clear: both;
-    content: "";
-    display: table;
-}
-
-.main-layout .area .tabs:after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
-    height: 0;
-    border-bottom: 1px solid #202020;
-}
-
-.main-layout .area .tabs .tab {
-    display: inline-block;
-    vertical-align: top;
-    width: 50%;
-    min-width: 230px;
-    height: 100%;
-    cursor: pointer;
-    text-align: left;
-    padding: 13px 14px 10px;
-    border-right: 2px solid #333;
-}
-
-.main-layout .area .tabs .tab:not(.tab-active):hover {
-    background-color: #1a1a1a;
-}
-
-.main-layout .area .tabs .tab.tab-active {
-    background-color: #333;
-}
-
-.main-layout .area .tabs .tab .filename {
-    font-size: 14px;
-    color: #bbb;
-}
-
-.main-layout .area .pages {
-    position: relative;
-    z-index: 1;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    box-flex: 1;
-    -webkit-flex: 1;
-    -moz-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-
-.main-layout .area .pages .page {
-  width: 100%;
-  height: auto;
-  display: none;
-}
-
-.main-layout .editors .pages .page {
-    height: 100%;
-}
-
-.main-layout .area .pages .page.page-active {
-    display: block;
-}
-
-.editor-files {
-    display: none;
-}
-
-.editor {
-    width: 100%;
-    height: 100%;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-*::-webkit-scrollbar-button {
-    width: 0px;
-    height: 0px;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: #555;
-    border: none;
-    border-radius: 0px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background: #666;
-}
-
-*::-webkit-scrollbar-thumb:active {
-    background: #666;
-}
-
-*::-webkit-scrollbar-track {
-    background: #141414;
-    border: 0px none #fff;
-    border-radius: 0px;
-}
-
-*::-webkit-scrollbar-corner {
-    background: transparent;
-}
-
-.hl_cc {
-  color: #8a8;
-}
-
-.hl_kv {
-  color: #ca6;
-}
-
-.hl_op {
-  color: #ca6;
-}
-
-.hl_num {
-  color: #c64;
-}
-
-#eCode, #eShaderCode {
-  width: 100%;
-  height: 100%;
-  background-color: #141414;
-  color: white;
-  border: 0;
-  resize: none;
-  padding: 0;
-  margin: 0;
-  outline: none;
-  font-size: 16px;
-}
-
-input[type=button] {
-    outline: none;
-}
-
-.docs {
-    width: 100%;
-    padding-left: 10px;
-    line-height: 125%;
-    font-size: 16px;
-    overflow: wrap;
-}
-</style>
+<title>SynthGen</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
+<noscript><font size=4 color=red><b>This app requires enabled JavaScript in browser!</b></font></noscript>
+<div id="eApp" class="app hidden">
 <header class="main">
+  <div class="menu-bar">
+    <label>{{ userLogin }}/</label><input type="text" v-model="name"/>
+    <a class="action"
+      v-bind:class="{ highlight: hasUnsharedChanges }"
+      v-bind:title="loc.saveLinkHotKey"
+      onclick="Save(true)">{{ loc.saveLink }}</a>
+    <a class="action"
+      v-bind:class="{ highlight: hasUnsavedChanges }"
+      v-bind:title="loc.saveToFileHotKey"
+      onclick="SaveToFile()">{{ loc.saveToFile }}</a>
+    <a class="action"
+      v-bind:class="{ highlight: needRegenerate }"
+      v-bind:title="loc.generateHotKey"
+      onclick="Generate()">{{ loc.generate }}</a>
+	</div>
   <div class="info">
-    <noscript><font size=4 color=red><b>Для работы приложения включите JavaScript в браузере!</b></font></noscript>
-    <div id="eTitle" class="title"></div>
-    <div class="last-update hidden" id="eDocumentDates">Создано: <span id="eCreationDate" class="value">никогда</span> Сохранено: <span id="eSaveDate" class="value">никогда</span></div>
-  </div>
-  <div class="toolbar">
-    <input id="eGenerateButton" class="action" value="Генерировать" title="Горячая клавиша Shift+Enter" onclick="Generate()" type="button"/>
-    <input id="eSaveButton" class="action" value="Сохранить" title="Горячая клавиша F6 или Ctrl+L" onclick="Save(true)" type="button"/>
+    <div class="last-update" v-show="createdAt">
+      {{ loc.created }}:
+      <span class="value">{{ createdAtLocal }}</span>
+      {{ loc.saved }}:
+      <span class="value">{{ updatedAtLocal }}</span>
+    </div>
   </div>
 </header>
 <div class="main-layout">
   <div class="area editors" data-tabs="yes">
     <div class="tabs">
-      <div data-tab="js" class="tab tab-active">JavaScript<span id="js-filename" class="filename">(управляющий код)</span></div>
-      <div data-tab="glsl" class="tab">GLSL<span id="glsl-filename" class="filename">(код шейдеров)</span></div>
+      <div data-tab="js" class="tab tab-active">JavaScript<span id="js-filename" class="filename">({{ loc.controlCode }})</span></div>
+      <div data-tab="glsl" class="tab">GLSL<span id="glsl-filename" class="filename">({{ loc.shaderCode }})</span></div>
     </div>
     <div class="pages">
       <div data-page="js" class="page page-active">
-<textarea id="eCode">
-var tex = TextureFromShader("vec4(Main(), 1.0)", 1024, 1024, "byte4");
-ExportTexture(tex, "tex");
-</textarea>
+        <editor editor-id="eCode" theme="twilight" :content="js" lang="javascript" v-on:change-content="onChangeJS"></editor>
       </div>
       <div data-page="glsl" class="page">
-<textarea id="eShaderCode">
-vec3 Main()
-{
-    return vec3(
-        PerlinOctaves(TexCoord*10.0, vec2(10.0), 10)*0.5 + 0.5
-    );
-}
-</textarea>
+        <editor editor-id="eShaderCode" theme="twilight" :content="glsl" lang="glsl" v-on:change-content="onChangeGLSL"></editor>
       </div>
     </div>
   </div>
@@ -441,148 +55,14 @@ vec3 Main()
   <div class="result">
       <div class="area" data-tabs="yes" id="eRightArea">
           <div class="tabs" id="eRightTabs">
-            <div data-tab="result" class="tab tab-active">Результат</div>
-            <div data-tab="docs" class="tab">Документация<span class="filename">(прототипы GLSL-функций)</span></div>
+            <div data-tab="result" class="tab tab-active">{{ loc.result }}</div>
+            <div data-tab="docs" class="tab">{{ loc.documentation }}<span class="filename">({{ loc.glslFunctionPrototypes }})</span></div>
           </div>
           <div class="pages" id="eRightPages">
             <div data-page="result" class="page page-active" style="height:100%;overflow:hidden">
-              <iframe id="eResultFrame" sandbox="allow-scripts" src="result.html"></iframe>
+              <iframe id="eResultFrame" sandbox="allow-scripts allow-modals" src="result.html"></iframe>
             </div>
-            <div data-page="docs" class="page">
-<pre class="docs"><span class="hl_cc">//Совместимость с новыми версиями GLSL</span>
-<span class="hl_kv">vec4</span> texture(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> texcoord)
-<span class="hl_kv">vec4</span> texture(<span class="hl_kv">samplerCube</span> s, <span class="hl_kv">vec3</span> texcoord)
-                
-<span class="hl_cc">//Совместимость с HLSL</span>
-<span class="hl_kv">float</span> saturate(<span class="hl_kv">float</span> x)
-<span class="hl_kv">vec2</span> saturate(<span class="hl_kv">vec2</span> x)
-<span class="hl_kv">vec3</span> saturate(<span class="hl_kv">vec3</span> x)
-<span class="hl_kv">vec4</span> saturate(<span class="hl_kv">vec4</span> x)
-<span class="hl_kv">float</span> frac(<span class="hl_kv">float</span> x)
-<span class="hl_kv">vec2</span> frac(<span class="hl_kv">vec2</span> x)
-<span class="hl_kv">vec3</span> frac(<span class="hl_kv">vec3</span> x)
-<span class="hl_kv">vec4</span> frac(<span class="hl_kv">vec4</span> x)
-                
-<span class="hl_cc">//Математика</span>
-<span class="hl_kv">const</span> <span class="hl_kv">float</span> PI
-<span class="hl_kv">vec4</span> taylorInvSqrt(<span class="hl_kv">vec4</span> r)
-<span class="hl_kv">mat3</span> RotationEulerMatrix(<span class="hl_kv">vec3</span> rotRads)
-<span class="hl_kv">float</span> ExpSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
-<span class="hl_kv">float</span> ExpSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
-<span class="hl_kv">float</span> SmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
-<span class="hl_kv">float</span> SmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
-<span class="hl_kv">float</span> PowerSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b, <span class="hl_kv">float</span> k)
-<span class="hl_kv">float</span> PowerSmoothMin(<span class="hl_kv">float</span> a, <span class="hl_kv">float</span> b)
-<span class="hl_kv">genType</span> sqr(<span class="hl_kv">genType</span> x)
-<span class="hl_kv">genType</span> sinh(<span class="hl_kv">genType</span> x)
-<span class="hl_kv">genType</span> cosh(<span class="hl_kv">genType</span> x)
-<span class="hl_kv">genType</span> tanh(<span class="hl_kv">genType</span> x)
-<span class="hl_kv">genType</span> sigma(<span class="hl_kv">genType</span> x) <span class="hl_op">=</span> x <span class="hl_op">/</span> (<span class="hl_num">1.0</span> <span class="hl_op">+</span> abs(x))
-<span class="hl_kv">genType</span> sinc(genType x) <span class="hl_op">=</span> sin(x) <span class="hl_op">/</span> x
-                
-<span class="hl_cc">//SDF для 3D примитивов с центром в начале координат</span>
-<span class="hl_kv">float</span> SphereSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">float</span> radius)
-<span class="hl_kv">float</span> PlaneSignedDistance(<span class="hl_kv">vec3</span> point)
-<span class="hl_kv">float</span> BoxSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> extents)
-<span class="hl_kv">float</span> RoundBoxDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> extents, <span class="hl_kv">float</span> radius)
-<span class="hl_kv">float</span> TorusSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> magMinRadius)
-<span class="hl_kv">float</span> HexPrismSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
-<span class="hl_kv">float</span> CapsuleSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> a, <span class="hl_kv">vec3</span> b, <span class="hl_kv">float</span> radius)
-<span class="hl_kv">float</span> TriPrismSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
-<span class="hl_kv">float</span> CylinderSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec2</span> h)
-<span class="hl_kv">float</span> ConeSignedDistance(<span class="hl_kv">vec3</span> point, <span class="hl_kv">vec3</span> c)
-                
-<span class="hl_cc">//Псевдослучайные числа, хеши</span>
-<span class="hl_kv">float</span> frand(<span class="hl_kv">vec2</span> seed)
-<span class="hl_kv">vec2</span> f2rand(<span class="hl_kv">vec2</span> seed)
-<span class="hl_kv">vec3</span> f3rand(<span class="hl_kv">vec2</span> seed)
-<span class="hl_kv">float</span> permute(<span class="hl_kv">float</span> x)
-<span class="hl_kv">vec3</span> permute(<span class="hl_kv">vec3</span> x)
-<span class="hl_kv">vec4</span> permute(<span class="hl_kv">vec4</span> x)
-<span class="hl_kv">vec2</span> fade(<span class="hl_kv">vec2</span> t)
-<span class="hl_kv">vec3</span> fade(<span class="hl_kv">vec3</span> t)
-                
-<span class="hl_cc">//Шум перлина</span>
-<span class="hl_kv">float</span> snoise(<span class="hl_kv">vecN</span> v)
-<span class="hl_kv">float</span> cnoise(<span class="hl_kv">vecN</span> v[, <span class="hl_kv">vecN</span> period<span class="hl_op">=</span><span class="hl_kv">vecN</span>(<span class="hl_num">289.0</span>)])
-<span class="hl_kv">vec2</span> cellular(<span class="hl_kv">vec2</span> P[, <span class="hl_kv">vec2</span> rep<span class="hl_op">=</span><span class="hl_kv">vec2</span>(<span class="hl_num">289.0</span>)])
-<span class="hl_kv">vec2</span> cellular(<span class="hl_kv">vec3</span> P[, <span class="hl_kv">vec3</span> rep<span class="hl_op">=</span><span class="hl_kv">vec3</span>(<span class="hl_num">289.0</span>)])
-<span class="hl_kv">vec2</span> grad2(<span class="hl_kv">vec2</span> p, <span class="hl_kv">float</span> rot)
-<span class="hl_kv">float</span> srdnoise(<span class="hl_kv">vec2</span> P, <span class="hl_kv">float</span> rot, <span class="hl_kv">out</span> <span class="hl_kv">vec2</span> grad)
-<span class="hl_kv">float</span> FloatHash(<span class="hl_kv">float</span> n)
-<span class="hl_kv">float</span> FloatHash(<span class="hl_kv">vec2</span> v)
-<span class="hl_kv">vec2</span> Vec2Hash(<span class="hl_kv">vec2</span> v)
-<span class="hl_kv">vec3</span> Vec3Hash(<span class="hl_kv">vec2</span> v)
-<span class="hl_kv">float</span> ValueNoise2D(<span class="hl_kv">vec2</span> v)
-<span class="hl_kv">float</span> ValueNoise3D(<span class="hl_kv">vec3</span> v)
-<span class="hl_kv">float</span> ValueNoise3D(<span class="hl_kv">vec3</span> v, <span class="hl_kv">sampler2D</span> noiseTex, <span class="hl_kv">vec2</span> noiseTex_PixelSize)
-<span class="hl_kv">float</span> GradientNoise(<span class="hl_kv">vec2</span> v)
-<span class="hl_kv">vec2</span> SmoothVoronoi(<span class="hl_kv">vec2</span> v, <span class="hl_kv">float</span> smoothness)
-<span class="hl_kv">float</span> Voronoise(<span class="hl_kv">vec2</span> x, <span class="hl_kv">float</span> gridControl, <span class="hl_kv">float</span> metricControl)
-                
-<span class="hl_cc">//Несколько октав шума Перлина</span>
-<span class="hl_kv">float</span> PerlinOctaves(<span class="hl_kv">vecN</span> coord, <span class="hl_kv">vecN</span> repeat, <span class="hl_kv">int</span> octaves[, <span class="hl_kv">float</span> gain<span class="hl_op">=</span><span class="hl_num">0.5</span>, <span class="hl_kv">float</span> lacunarity<span class="hl_op">=</span><span class="hl_num">2.0</span>, vecN offset<span class="hl_op">=</span>vecN(<span class="hl_num">0.0</span>)])
-                
-<span class="hl_cc">//Несколько октав шума Перлина с указанным уровнем низких (coeffLow) и высоких (gainHigh) частот.</span>
-<span class="hl_cc">//Соответствует PerlinOctaves при coeffLow = 1 и gainHigh = gain</span>
-<span class="hl_kv">float</span> PerlinOctavesSpectrum(<span class="hl_kv">vec2</span> coord, <span class="hl_kv">vec2</span> period, <span class="hl_kv">int</span> octaves, <span class="hl_kv">float</span> coeffLow, <span class="hl_kv">float</span> gainHigh[, <span class="hl_kv">float</span> lacunarity, <span class="hl_kv">vec2</span> offset])
-                
-<span class="hl_cc">//Цветовые пространства</span>
-<span class="hl_kv">vec3</span> RGB2HSV(<span class="hl_kv">vec3</span> c)
-<span class="hl_kv">vec3</span> HSV2RGB(<span class="hl_kv">vec3</span> c)
-<span class="hl_kv">vec3</span> RGB2YUV(<span class="hl_kv">vec3</span> rgb)
-<span class="hl_kv">vec3</span> YUV2RGB(<span class="hl_kv">vec3</span> yuv)
-<span class="hl_kv">vec4</span> RGB2RGBM(<span class="hl_kv">vec3</span> color)
-<span class="hl_kv">vec3</span> RGBM2RGB(<span class="hl_kv">vec4</span> rgbm)
-<span class="hl_kv">float</span> Linear2SRGB(<span class="hl_kv">float</span> x)
-<span class="hl_kv">vec2</span> Linear2SRGB(<span class="hl_kv">vec2</span> x)
-<span class="hl_kv">vec3</span> Linear2SRGB(<span class="hl_kv">vec3</span> x)
-<span class="hl_kv">vec4</span> Linear2SRGB(<span class="hl_kv">vec4</span> x)
-<span class="hl_kv">float</span> SRGB2Linear(<span class="hl_kv">float</span> x)
-<span class="hl_kv">vec2</span> SRGB2Linear(<span class="hl_kv">vec2</span> x)
-<span class="hl_kv">vec3</span> SRGB2Linear(<span class="hl_kv">vec3</span> x)
-<span class="hl_kv">vec4</span> SRGB2Linear(<span class="hl_kv">vec4</span> x)
-                
-<span class="hl_cc">//Нормали по высотам</span>
-<span class="hl_kv">vec3</span> NormalFromHeights(<span class="hl_kv">float</span> center, <span class="hl_kv">float</span> right, <span class="hl_kv">float</span> bottom, <span class="hl_kv">float</span> scale)
-<span class="hl_kv">vec3</span> NormalFromHeightMapR(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapG(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapB(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapA(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> pixelSize)
-<span class="hl_kv">void</span> Gather8AdjacentTexelsR(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
-<span class="hl_kv">void</span> Gather8AdjacentTexelsG(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
-<span class="hl_kv">void</span> Gather8AdjacentTexelsB(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
-<span class="hl_kv">void</span> Gather8AdjacentTexelsA(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> top, <span class="hl_kv">out</span> <span class="hl_kv">vec4</span> bottom)
-<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3R(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3G(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3B(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
-<span class="hl_kv">vec3</span> NormalFromHeightMapSobel3A(<span class="hl_kv">sampler2D</span> hmap, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">float</span> scale, <span class="hl_kv">vec2</span> texelSize)
-                
-<span class="hl_cc">//Свёртка, размытие, дифференцирование изображения</span>
-<span class="hl_kv">vec4</span> ConvolutionFilter3(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">9</span>])
-<span class="hl_kv">vec4</span> ConvolutionFilter5(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">25</span>])
-<span class="hl_kv">vec4</span> ConvolutionFilter7(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> st, <span class="hl_kv">float</span> kernel[<span class="hl_num">49</span>])
-<span class="hl_kv">vec4</span> EdgeDetect(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> texelSize)
-<span class="hl_kv">vec4</span> GaussianBlur9(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">vec2</span> dir)
-<span class="hl_kv">vec4</span> GaussianBlur17(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">vec2</span> dir)
-<span class="hl_kv">vec4</span> NoiseBlur(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> center, <span class="hl_kv">float</span> blurAmount)
-<span class="hl_kv">vec4</span> DiffFree(<span class="hl_kv">sampler2D</span> s, <span class="hl_kv">vec2</span> pos, <span class="hl_kv">vec2</span> pixSize)
-                
-<span class="hl_cc">//Фильтры выборки из текстуры</span>
-<span class="hl_kv">vec4</span> textureBicubic(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> texcoord, <span class="hl_kv">vec2</span> texelSize)
-<span class="hl_kv">vec4</span> textureSmooth(<span class="hl_kv">sampler2D</span> tex, <span class="hl_kv">vec2</span> texcoord, <span class="hl_kv">vec2</span> texelSize)
-                
-<span class="hl_cc">//Генерация сетки</span>
-<span class="hl_kv">float</span> GenBricks(<span class="hl_kv">vec2</span> pos, <span class="hl_kv">ivec2</span> count, <span class="hl_kv">vec2</span> dist, <span class="hl_kv">float</span> scrollX)
-<span class="hl_kv">void</span> HexGrid(<span class="hl_kv">out</span> <span class="hl_kv">vec4</span> o, <span class="hl_kv">vec2</span> TexCoord)
-                
-<span class="hl_cc">//Запаковка float в текстуры с 8-битными каналами, актуально для старых мобильных устройств</span>
-<span class="hl_kv">vec4</span> EncodeFloatAsRGBA8(<span class="hl_kv">float</span> v)
-<span class="hl_kv">float</span> DecodeFloatFromRGBA8(<span class="hl_kv">vec4</span> rgba8)
-<span class="hl_kv">vec2</span> EncodeFloatAsRG8(<span class="hl_kv">float</span> v)
-<span class="hl_kv">float</span> DecodeFloatFromRG8(<span class="hl_kv">vec2</span> rg8)
-</pre>
-                
+            <div data-page="docs" class="page" id="eDocs">
             </div>
           </div>
         </div>
@@ -591,17 +71,210 @@ vec3 Main()
 <footer class="status">
   
 </footer>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ext-language_tools.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/mode-html.js"></script>
-
-<script src="Utils.js"></script>
+<script src="utils.js"></script>
+<script src="httpapi.js"></script>
+<script src="state.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.js"></script>
 
 
 <script>
+
+ace.require("ace/ext/language_tools");
+
+Vue.component('Editor', {
+	template: '<div :id="editorId" style="position: relative; width: 100%; height: 100%;"></div>',
+  props: ['editorId', 'content', 'lang', 'theme'],
+  data: function() {
+    return {
+      editor: Object,
+      beforeContent: ''
+    }
+  },
+  watch: {
+    content: function(value) {
+    	if (this.beforeContent !== value) {
+      	this.editor.setValue(value, 1)
+      }
+    }
+  },
+  mounted: function() {
+  	var lang = this.lang || 'text'
+    var theme = this.theme || 'github'
+
+  
+    this.editor = window.ace.edit(this.editorId)
+    this.editor.setValue(this.content, 1)
+
+    document.getElementById(this.editorId).editor = this.editor
+    
+    this.editor.getSession().setMode("ace/mode/" + lang)
+    this.editor.setTheme("ace/theme/" + theme)
+
+
+    this.editor.commands.bindKeys({"ctrl-l": null});
+    this.editor.$blockScrolling = Infinity;
+    this.editor.setFontSize(16);
+	  this.editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+    var t = this
+
+    this.editor.on('change', function() {
+    	t.beforeContent = t.editor.getValue()
+      t.$emit('change-content', t.editor.getValue())
+    })
+  }
+})
+
+var localizations = {
+  ru: {
+    saveLink: "Сохранить ссылку",
+    saveLinkHotKey: "Горячая клавиша F6 или Ctrl+L",
+    saveToFile: "Сохранить в файл",
+    saveToFileHotKey: "Горячая клавиша Ctrl+S",
+    generateHotKey: "Горячая клавиша Shift+Enter",
+    generate: "Генерировать",
+    created: "Создано",
+    saved: "Сохранено",
+    never: "никогда",
+    result: "Результат",
+    controlCode: "управляющий код",
+    shaderCode: "код шейдеров",
+    documentation: "Документация",
+    glslFunctionPrototypes: "прототипы GLSL-функций"
+  },
+  en: {
+    saveLink: "Save link",
+    saveLinkHotKey: "Hotkey F6 or Ctrl+L",
+    saveToFile: "Save to file",
+    saveToFileHotKey: "Hotkey Ctrl+S",
+    generateHotKey: "Hotkey Shift+Enter",
+    generate: "Generate",
+    created: "Created",
+    saved: "Saved",
+    never: "never",
+    result: "Result",
+    controlCode: "control code",
+    shaderCode: "shader code",
+    documentation: "Documentation",
+    glslFunctionPrototypes: "GLSL function prototypes"
+  }
+}
+
+var app = new Vue({
+  el: '#eApp',
+  data: {
+    sharedJS: "",
+    sharedGLSL: "",
+    savedJS: "",
+    savedGLSL: "",
+    generatedJS: "",
+    generatedGLSL: "",
+    name: "",
+    gistId: null,
+    userLogin: "",
+    userToken: null,
+    loadedSynthgenUserLogin: null,
+    loadedSynthgenName: null,
+    createdAt: null,
+    updatedAt: null,
+    js: 'CanvasSize = [1024, 1024];\nTexture.FromShader("GetPixelColor(TexCoord)").Export("tex");\n',
+    glsl: 'vec3 GetPixelColor(vec2 xy)\n{\n\tfloat factor = 0.5 + PerlinOctaves(xy*10.0, vec2(10.0), 10)*0.5;\n\treturn HSV2RGB(vec3(factor*2.0*PI, 0.8, 0.7));\n}\n',
+    loc: localizations.en
+  },
+  mounted: function() {
+    this.loc = navigator.language.startsWith("ru")? localizations.ru: localizations.en
+    this.userLogin = GetCookie("userLogin") || null
+    this.userToken = GetCookie("userToken") || null
+    eApp.classList.remove("hidden");
+  },
+  computed: {
+    createdAtLocal: function() {return this.createdAt? this.createdAt.toLocaleString(): this.loc.never},
+    updatedAtLocal: function() {return this.updatedAt? this.updatedAt.toLocaleString(): this.loc.never},
+    hasUnsharedChanges: function() {return this.js != this.sharedJS || this.glsl != this.sharedGLSL},
+    hasUnsavedChanges: function() {return this.js != this.savedJS || this.glsl != this.savedGLSL},
+    needRegenerate: function() {return this.js != this.generatedJS || this.glsl != this.generatedGLSL}
+  },
+  methods: {
+  	onSave: function() {
+    	this.savedJS = this.js
+      this.savedGLSL = this.glsl
+    },
+    onShare: function() {
+    	this.sharedJS = this.js
+      this.sharedGLSL = this.glsl
+      this.onSave()
+    },
+    onGenerate: function() {
+      this.generatedJS = this.js
+      this.generatedGLSL = this.glsl
+    },
+    onChangeJS: function(val) {
+    	if(this.js !== val)
+      	this.js = val
+    },
+    onChangeGLSL: function(val) {
+    	if(this.glsl !== val)
+      	this.glsl = val
+    },
+    onAuth: function(userLogin, userToken) {
+      this.userLogin = userLogin
+      this.userToken = userToken
+    }
+  }
+})
+app.onShare();
+
+function AddAutoCompletion(editor, wordList)
+{
+  var staticWordCompleter = {
+      getCompletions: function(editor1, session, pos, prefix, callback) {
+        if(eCode.editor == editor1) callback(null, wordList.map(function(word) {
+          var caption = word[0];
+          if(word[1] != null) caption += "(" + word[1].join(", ") + ")";
+          return {
+            caption: caption,
+            value: word[0] + ((word[1] != null)? "(": ""),
+            meta: word[1] == null? "parameter": "function"
+          };
+        }));
+      }
+    }
+    eCode.editor.completers.unshift(staticWordCompleter);
+    if(!eCode.editor.completer) {
+      // make sure completer is initialized
+      eCode.editor.execCommand("startAutocomplete")
+      eCode.editor.completer.detach()
+    }
+    eCode.editor.completer.popup.container.style.width = "60%";
+}
+AddAutoCompletion(eCode.editor, [
+	["Texture.FromShader", ["exprOrShader", "width=CanvasSize[0]", "height=CanvasSize[1]", "format='byte4'", "inputTexturesArr=[]", "params=[]"]],
+	["new ShaderExpression", ["expr", "numComponents"]],
+	["Export", ["name"]]
+]);
+AddAutoCompletion(eShaderCode.editor, [
+	["TexCoord", null]
+]);
+
+
+Http({
+  path: "docs.html",
+  then: function(r) {
+    eDocs.innerHTML = r.response;
+  }
+});
+
 function Tabs(id) {
-  this.element = (typeof id === 'string') ? document.getElementById(id) : id;
+  this.element = (typeof id === 'string')? document.getElementById(id): id;
   this.events = new Events(this);
   this.attach();
 }
@@ -773,76 +446,6 @@ Splitter.prototype.getComputedStyle = function (elem, prop) {
   }
 }
 
-
-var gCodeEditor = eCode;
-var gShaderCodeEditor = eShaderCode;
-var gDocumentChanged = false;
-
-function ReplaceTextAreaWithAce(textarea, lang, wordList)
-{
-	var editDiv = document.createElement("div");
-	editDiv.style.position = "relative";
-	editDiv.style.width = "100%";
-	editDiv.style.height = "100%";
-	textarea.parentNode.insertBefore(editDiv, textarea);
-  var editor = ace.edit(editDiv);
-	editor.commands.bindKeys({"ctrl-l": null});
-	editor.$blockScrolling = Infinity;
-  editor.getSession().setValue(textarea.value);
-  editor.getSession().setMode("ace/mode/" + lang);
-  editor.setTheme("ace/theme/twilight");
-  editor.setFontSize(16);
-	editor.setOptions({
-		enableBasicAutocompletion: true,
-		enableSnippets: true,
-		enableLiveAutocompletion: true
-	});
-	var staticWordCompleter = {
-		getCompletions: function(editor1, session, pos, prefix, callback) {
-			if(editor == editor1) callback(null, wordList.map(function(word) {
-				var caption = word[0];
-				if(word[1] != null) caption += "(" + word[1].join(", ") + ")";
-				return {
-					caption: caption,
-					value: word[0] + ((word[1] != null)? "(": ""),
-					meta: word[1] == null? "parameter": "function"
-				};
-			}));
-		}
-	}
-	editor.completers.unshift(staticWordCompleter);
-	if(!editor.completer) {
-		// make sure completer is initialized
-		editor.execCommand("startAutocomplete")
-		editor.completer.detach()
-	}
-	editor.completer.popup.container.style.width = "60%";
-	textarea.parentNode.removeChild(textarea);
-	return editor;
-}
-
-function ReplaceTextAreasWithAce()
-{
-	ace.require("ace/ext/language_tools");
-	gCodeEditor = ReplaceTextAreaWithAce(gCodeEditor, "javascript", [
-		["TextureFromShader", ["exprOrShader", "width", "height", "format", "inputTexturesArr", "params [opt]"]],
-		["CreateShaderExpression", ["expr", "numComponents"]],
-		["ExportTexture", ["tex", "name"]]
-	]);
-	gShaderCodeEditor = ReplaceTextAreaWithAce(gShaderCodeEditor, "glsl", [
-		["TexCoord", null]
-  ]);
-  function markChanges()
-  {
-    gDocumentChanged = true;
-    eSaveButton.classList.add('highlight');
-    eGenerateButton.classList.add('highlight');
-  }
-	gCodeEditor.getSession().on('change', markChanges);
-	gShaderCodeEditor.getSession().on('change', markChanges);
-}
-
-
 // ---
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -853,15 +456,15 @@ window.addEventListener('DOMContentLoaded', function () {
   var tabs = new Tabs(tabsEl[0]);
   var tabsRight = new Tabs(tabsEl[1]);
 
-  ReplaceTextAreasWithAce();
+  //ReplaceTextAreasWithAce();
 
   tabs.events.add('change', function (idx) {
-    if(idx == 0) gCodeEditor.focus();
-    else gShaderCodeEditor.focus();
+    if(idx == 0) eCode.editor.focus();
+    else eShaderCode.editor.focus();
   });
 
   if (window == window.top)
-    gCodeEditor.focus();
+    eCode.editor.focus();
 });
 
 
@@ -916,116 +519,8 @@ Events.prototype.fireOnce = function (event, listener) {
   });
 }
 
-
-function ExecuteInIFrame(controlCode, glsl)
-{
-  eResultFrame.contentWindow.postMessage({
-    controlCode: controlCode,
-    glsl: glsl
-  }, "*");
-}
-
-function GetCodeInput()
-{
-	return EditorGetText(gCodeEditor);
-}
-
-function GetShaderInput()
-{
-	return EditorGetText(gShaderCodeEditor);
-}
-
-function Generate()
-{
-  eGenerateButton.classList.remove('highlight');
-	ExecuteInIFrame(GetCodeInput(), GetShaderInput());
-}
-
-function Save(showMsg)
-{
-	DBInsert("texgens", {
-			"code": GetCodeInput(),
-			"shader": GetShaderInput(),
-			"name": "<unnamed>"
-		}, function(result) {
-      eSaveButton.classList.remove('highlight');
-			gDocumentChanged = false;
-			var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?id=" + result._id;
-			window.history.replaceState({}, document.title, newUrl);
-			if(showMsg) alert("Сохранено. Скопируйте ссылку из адресной строки.");
-		});
-}
-
-function Load()
-{
-	if(!location.search) return;
-  var id = GetParameterByName("id");
-  
-  function OnLoad(result)
-  {
-    if(result != "<unnamed>") eTitle.innerText = result.name;
-    else eTitle.innerText = result._id;
-    eDocumentDates.classList.remove("hidden");
-    eCreationDate.innerText = result.createdAt.toLocaleString();
-    eSaveDate.innerText = result.updatedAt.toLocaleString();
-    EditorSetText(gCodeEditor, result.code);
-    EditorSetText(gShaderCodeEditor, result.shader);
-    eSaveButton.classList.remove("highlight");
-    gDocumentChanged = false;
-  }
-
-	if(id !== null)
-	{
-		DBReadById("texgens", id, ["code", "shader", "_id", "name", "createdAt", "updatedAt"], OnLoad);
-		return;
-	}
-	var name = GetParameterByName("name");
-	if(name !== null)
-	{
-		DBQuery("texgens",
-			{"name": {"$eq": name}},
-			function(results) {
-				if(results[0] === undefined) return;
-				OnLoad(results[0]);
-			},
-			{fields: ["code", "shader", "_id", "name", "createdAt", "updatedAt"], limit: 1});
-		return;
-	}
-}
-
-function EditorGetText(editor)
-{
-	if(editor.nodeName == "TEXTAREA") return editor.value;
-	return editor.getSession().getValue();
-}
-
-function EditorSetText(editor, newText)
-{
-	if(editor.nodeName == "TEXTAREA") editor.value = newText;
-	else editor.getSession().setValue(newText);
-}
-
-function GetParameterByName(name, url)
-{
-	if(!url) url = window.location.href;
-	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-	var results = regex.exec(url);
-	if(!results) return null;
-	if(!results[2]) return '';
-	return decodeURIComponent(results[2]);
-}
-
-if(location.search)
-{
-	var code = GetParameterByName("code");
-	if(code !== null) EditorSetText(gCodeEditor, decodeURI(code));
-	var shaderCode = GetParameterByName("shader");
-	if(shaderCode !== null) EditorSetText(gShaderCodeEditor, decodeURI(shaderCode));
-}
-
 window.onbeforeunload = function(e) {
-	if(!gDocumentChanged) return;
+	if(!app.documentChanged) return;
 	var dialogText = 'Вы уверены, что хотите закрыть страницу без сохранения изменений?';
 	e.returnValue = dialogText;
 	return dialogText;
