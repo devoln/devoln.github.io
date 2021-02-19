@@ -716,7 +716,7 @@ vec2 grad2(vec2 p, float rot)
 	return vec2(abs(u)-1.0, abs(abs(u + 1.0) - 2.0) - 1.0);
 #else
 	// For more isotropic gradients, sin/cos can be used instead.
-	u* = 2.0*PI;
+	u *= 2.0*PI;
 	return vec2(cos(u), sin(u));
 #endif
 }

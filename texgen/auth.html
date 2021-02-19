@@ -5,19 +5,19 @@
 
 <body>
 <script>
-var serverAddress = "https://devoln.herokuapp.com"
+const serverAddress = "https://devoln.herokuapp.com"
 function send() {
-	var xhr = new XMLHttpRequest();
+	let xhr = new XMLHttpRequest();
 	xhr.open('POST', serverAddress + "/github/auth" + window.location.search, true);
 	xhr.send();
 	xhr.onreadystatechange = function()
 	{
-		if(xhr.readyState != 4) return;
-		if(xhr.status != 200)
+		if(xhr.readyState !== 4) return;
+		if(xhr.status !== 200)
 			alert("Error:\n" + xhr.status + ': ' + xhr.statusText);
 		else
 		{
-			var resp = JSON.parse(xhr.response);
+			const resp = JSON.parse(xhr.response);
 			if(resp)
 			{
 				document.cookie = "userToken=" + resp.token + "; path=/";
@@ -31,3 +31,4 @@ function send() {
 send();
 </script>
 </body>
+</html>

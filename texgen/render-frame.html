@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Synthgen Result</title>
+
+<style>
+html,
+body {
+    width: 100%;
+    height: 100%;
+    border: 0;
+	margin: 0;
+	color: white;
+}
+.errorLogMsg {
+	color: indianred;
+}
+.warnLogMsg {
+	color: gold;
+}
+.debugLogMsg {
+	color: beige;
+}
+.logMsg {
+	color: white;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #555;
+    border: none;
+    border-radius: 0;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+*::-webkit-scrollbar-thumb:active {
+    background: #666;
+}
+
+*::-webkit-scrollbar-track {
+    background: #141414;
+    border: 0 none white;
+    border-radius: 0;
+}
+
+*::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.canvas-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	overflow-wrap: break-word;
+	background: rgba(0, 0, 0, 0.5)
+}
+
+
+
+.menu-bar {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu-bar a {
+  float: left;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  padding: 4px 8px;
+  text-decoration: none;
+  background-color: rgba(32, 32, 32, 0.6);
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 12px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 4px 8px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.menu-bar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: #25a;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(32, 32, 32, 0.6);
+  min-width: 80px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 503;
+}
+
+.dropdown-content a {
+  float: none;
+  color: white;
+  padding: 4px 8px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #25a;
+}
+
+.dropdown-show {
+  display: block;
+  z-index: 500;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script id="FragmentShaderCodeStart" type="x-shader/x-fragment">
+
+</script>
+
+<script>
+"use strict"
+window.onclick = function(e) {
+	if(e.target.matches('.dropbtn')) return;
+	let elements = document.getElementsByClassName('dropdown-show');
+	for(let i = 0; i < elements.length; i++)
+		elements[i].classList.remove('dropdown-show');
+}
+</script>
+
+	<div style="display:none">
+		<div id="eSmallCanvasTemplate" style="position: relative; display: inline-block">
+			<canvas></canvas>
+			<div class="canvas-content">
+				<div class="menu-bar">
+					<div class="dropdown">
+						<button class="dropbtn" onclick="this.nextElementSibling.classList.toggle('dropdown-show')">Export</button>
+						<div class="dropdown-content">
+							<a href="#" onclick="OnSaveImageButton(this, 'png')">PNG</a>
+							<a href="#" onclick="OnSaveImageButton(this, 'jpg')">JPEG</a>
+							<a href="#" name="webp" onclick="OnSaveImageButton(this, 'webp')">WEBP</a>
+							<a href="#" onclick="OnSaveImageButton(this, 'bmp')">BMP</a>
+						</div>
+					</div>
+				</div>
+				<span name="name"></span>
+			</div>
+		</div>
+	</div>
+
+	<span id="eLogOutput"></span>
+	<div id="eResults">
+		<div id="eMainCanvasContainer" style="position: relative">
+			<canvas id="eMainCanvas"></canvas>
+			<div class="canvas-content"></div>
+		</div>
+		<div id="eSmallCanvases"></div>
+	</div>
+</body>
+
+<script src="src/utils.js"></script>
+<script src="src/runtime/shaderParser.js"></script>
+<script src="src/runtime/Engine.js"></script>
+
+<script>
+"use strict"
+const gResults = eResults;
+
+let gLog = "";
+{
+	const log = console.log.bind(console)
+	const error = console.error.bind(console)
+	const warn = console.warn.bind(console)
+	const debug = console.debug.bind(console)
+
+	console.log = (...args) => {
+		gLog += `<span class='logMsg'>${EscapeHTML(args[0])}</span><br/>`;
+		log(...args)
+	}
+	console.error = (...args) => {
+		gLog += `<span class='errorLogMsg'>${EscapeHTML(args[0])}</span><br/>`;
+		error(...args)
+	}
+	console.warn = (...args) => {
+		gLog += `<span class='warnLogMsg'>${EscapeHTML(args[0])}</span><br/>`;
+		warn(...args)
+	}
+	console.debug = (...args) => {
+		gLog += `<span class='debugLogMsg'>${EscapeHTML(args[0])}</span><br/>`;
+		debug(...args)
+	}
+}
+
+let gShaderLibraryLoader = Http({path: "ShaderLib.glsl"});
+let gShaderInputCode = null;
+
+const gEngine = new Engine(document.createElement("canvas"));
+
+function CreateImageFromTexture(texture)
+{
+	return CreateImageFromPixels(gEngine.TexturePixels(texture), texture.width, texture.height);
+}
+
+
+
+function CleanUpResults()
+{
+	gLog = "";
+	gl.useProgram(gl.state.currentProgram = null);
+	if(gResults.shaders)
+	for(let shaderKey in gResults.shaders)
+	{
+		let shader = gResults.shaders[shaderKey];
+		if(shader) shader.Free();
+	}
+	gResults.shaders = {};
+	
+	if(gResults.textures)
+	gResults.textures.forEach(function(tex) {
+		tex.Free();
+	});
+	gResults.textures = [];
+	
+	gResults.exportedTextures = {};
+}
+window.onunload = function(event) {
+	CleanUpResults();
+	return false;
+};
+
+let CanvasSize = [512, 512];
+let gCanvases = [];
+
+function OnSaveImageButton(node, ext) {
+	const canvas = node.parentNode.parentNode.parentNode.parentNode.previousElementSibling;
+	const name = canvas.textureName;
+	const filename = name.replace(/[\W_]+/g, "_") + "." + ext;
+	switch(ext) {
+		case "png": SaveCanvasPNG(TextureToTempCanvas(gResults.exportedTextures[name]), filename); break;
+		case "jpg": SaveCanvasJPEG(TextureToTempCanvas(gResults.exportedTextures[name]), filename); break;
+		case "webp": if(ChromeVersion) SaveCanvasWEBP(TextureToTempCanvas(gResults.exportedTextures[name]), filename); break;
+		case "bmp": SaveCanvasBMP(TextureToTempCanvas(gResults.exportedTextures[name]), filename); break;
+	}
+}
+
+let gSelectedTextureName
+
+function SelectTextureToShow(name)
+{
+	gSelectedTextureName = name;
+	if(!name) return;
+	TextureToCanvas(gResults.exportedTextures[name], eMainCanvas);
+	eMainCanvas.textureName = name;
+}
+
+function Generate(controlCode, shaderCode)
+{
+	CleanUpResults();
+	const genfunc = function() {
+		CanvasSize = [512, 512];
+		gShaderInputCode = shaderCode;
+		try {eval(controlCode);}
+		catch(err)
+		{
+			if(err.stack) console.error(err.stack);
+			else console.error(err.toString());
+		}
+		if(gLog) eLogOutput.innerHTML = `<p>${gLog}</p>`;
+		let i = 0;
+		for(let name in gResults.exportedTextures)
+		{
+			let tex = gResults.exportedTextures[name];
+			let canvas;
+			if(i >= gCanvases.length)
+			{
+				let canvasContainer = eSmallCanvasTemplate.cloneNode(true);
+				canvasContainer.id = "" + i;
+				canvas = canvasContainer.firstElementChild;
+				canvas.width = canvas.height = 128;
+				canvasContainer.style.width = canvasContainer.style.height = "128px";
+				eSmallCanvases.appendChild(canvasContainer);
+				gCanvases.push(canvasContainer);
+			}
+			else canvas = gCanvases[i].firstElementChild;
+			gCanvases[i].querySelector('span[name="name"]').innerText = name;
+			if(!ChromeVersion) gCanvases[i].querySelector('a[name="webp"]').style.display = 'none';
+			tex.ToCanvas(canvas);
+			canvas.textureName = name;
+			i++;
+		}
+		while(i < gCanvases.length)
+		{
+			let canvasContainer = gCanvases.pop();
+			eSmallCanvases.removeChild(canvasContainer);
+			let canvas = canvasContainer.firstElementChild;
+			canvas.width = 0;
+			canvas.height = 0;
+		}
+		eMainCanvasContainer.style.width = CanvasSize[0] + "px";
+		eMainCanvasContainer.style.height = CanvasSize[1] + "px";
+		if(eMainCanvas.width !== CanvasSize[0]) eMainCanvas.width = CanvasSize[0];
+		if(eMainCanvas.height !== CanvasSize[1]) eMainCanvas.height = CanvasSize[1];
+		SelectTextureToShow(gCanvases[0].firstElementChild.textureName);
+	}
+	if(gShaderLibraryLoader.code !== undefined) genfunc();
+	else gShaderLibraryLoader.onload = genfunc;
+}
+    
+function receiveMessage(event)
+{
+	if(!event.origin.startsWith(location.origin)) return;
+    Generate(event.data.appCode, event.data.glsl);
+}
+window.addEventListener("message", receiveMessage, false);
+</script>
+
+</html>
